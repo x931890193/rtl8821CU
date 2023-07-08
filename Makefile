@@ -96,7 +96,7 @@ CONFIG_RTW_SDIO_PM_KEEP_POWER = y
 ###################### MP HW TX MODE FOR VHT #######################
 CONFIG_MP_VHT_HW_TX_MODE = y
 ###################### Platform Related #######################
-CONFIG_PLATFORM_I386_PC = y
+CONFIG_PLATFORM_I386_PC = n
 CONFIG_PLATFORM_ARM_RPI = n
 CONFIG_PLATFORM_ARM64_RPI = n
 CONFIG_PLATFORM_ANDROID_X86 = n
@@ -159,6 +159,7 @@ CONFIG_PLATFORM_NV_TK1_UBUNTU = n
 CONFIG_PLATFORM_RTL8197D = n
 CONFIG_PLATFORM_AML_S905 = n
 CONFIG_PLATFORM_ZTE_ZX296716 = n
+
 ###############################################################
 
 CONFIG_DRVEXT_MODULE = n
@@ -1218,6 +1219,18 @@ MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/realtek/rtl8821cu
 INSTALL_PREFIX :=
 STAGINGMODDIR := /lib/modules/$(KVER)/kernel/drivers/staging/rtl8821cu
 endif
+
+CONFIG_PLATFORM_RISCV = y
+ifeq ($(CONFIG_PLATFORM_RISCV), y)
+EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
+ARCH ?= riscv
+CROSS_COMPILE ?=
+KVER ?= $(shell uname -r)
+# 注意下面KSRC 修改为第一步系统内核源码的文件路径 TODO, path to kernel source code
+KSRC ?= /root/linux 
+MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
+endif
+
 
 
 
