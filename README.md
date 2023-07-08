@@ -8,6 +8,31 @@ mkdir -p ~/build
 cd ~/build
 git clone https://github.com/brektrou/rtl8821CU.git
 ```
+## Edit MakeFile
+```
+CONFIG_PLATFORM_I386_PC = y
+```
+#### To
+```
+CONFIG_PLATFORM_I386_PC = n
+CONFIG_PLATFORM_RISCV = y
+```
+#### Add
+```
+ifeq ($(CONFIG_PLATFORM_RISCV), y)
+EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
+ARCH ?= riscv
+CROSS_COMPILE ?=
+KVER ?= $(shell uname -r)
+# 注意下面KSRC 修改为第一步系统内核源码的文件路径 path to kernel source 
+KSRC ?= /root/linux
+MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
+endif
+```
+#### Detail
+
+https://www.mongona.com/blog/44
+
 ## Check the name of the interface
 
 Check the interface name of your wifi adapter using `ifconfig`. Usually, it will be wlan0 by default, but it may vary depends on the kernel and your device. On Ubuntu, for example, it may be named as wlx + MAC address. (https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/) 
